@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+  	android:layout_width="fill_parent" 
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+>
+   					  
+<EditText android:id="@+id/newNoteTitle" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:autoText="true"
+      	android:hint="Specify title..."/>
+        
+ 
+<EditText
+ 		xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/newNoteText"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical"
+        android:minLines="5"
+        android:gravity="top"
+        android:hint="Enter your note..."
+        />
+        
+        
+   
+
+</LinearLayout>
