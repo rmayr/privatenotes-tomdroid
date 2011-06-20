@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	                        
+	<PreferenceCategory android:title="@string/prefSync">
+		
+		<ListPreference android:title="@string/prefSyncMethod"
+						android:dialogTitle="Choose the sync method to use"
+						android:key="sync_method"/>
+						
+		<EditTextPreference android:key="sync_server_uri"
+							android:title="@string/prefSyncServerUri"
+							android:positiveButtonText="@string/prefAuthenticate"
+							android:shouldDisableView="true"/>
+							
+		<ListPreference android:title="@string/shareList"
+						android:positiveButtonText="@string/shareRemove"
+						android:dialogTitle="@string/shareRemoveOne"
+						android:key="sharesList"/>
+							
+		<CheckBoxPreference android:key="save_pw"
+							android:title="@string/prefSavePassword" />
+							
+							
+	</PreferenceCategory>
+	
+</PreferenceScreen>

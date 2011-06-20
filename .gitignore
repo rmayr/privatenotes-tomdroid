@@ -1,0 +1,8 @@
+
+Tomdroid2WaySync/*.log
+WebDavAbstraction/bin
+Tomdroid/*.log
+Tomdroid/sdcard.img
+Tomdroid/*.lnk
+Tomdroid/target
+Tomdroid/util/*.lnk

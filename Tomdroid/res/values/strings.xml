@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+ Tomdroid
+ Tomboy on Android
+ http://www.launchpad.net/tomdroid
+
+ Copyright 2008, 2009, 2010 Olivier Bilodeau <olivier@bottomlesspit.org>
+ 
+ This file is part of Tomdroid.
+ 
+ Tomdroid is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ Tomdroid is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with Tomdroid.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<resources>
+    <string name="app_name">Tomdroid</string>
+    <string name="app_desc">Tomboy compatible wikiwiki note-taking application.</string>
+    <string name="author">Olivier Bilodeau, Patrick Gabor, Paul Klingelhuber</string>
+
+	<!-- main.xml -->
+    <string name="strListEmptyNoNotes">
+    	There are no notes in Tomdroid\'s database.
+    </string>
+    
+    <string name="menuSave">Save</string>
+    <string name="menuSync">Sync</string>
+	<string name="menuPrefs">Settings</string>
+    <string name="menuAbout">About</string>
+    <string name="menuNewNote">New Note</string>
+    <string name="menuImportShare">Import</string>
+    <string name="menuDelete">Delete</string>
+    <string name="menuEdit">Edit</string>
+    <string name="menuView">View</string>
+    <string name="menuRevert">Reset DB</string>
+    <string name="strWelcome">
+    	Welcome to Tomdroid.
+    	\n\nThis is a note application for Tomboy.
+    	\nYou can create edit and en-/decrypt notes.
+    </string>
+<!--     %3$s-->
+    <string name="strAbout">
+    	%1$s
+    	\n\nAuthor: %2$s
+    	\nVersion: 0.7
+    	\nLicensed under the GPLv3
+    </string>
+
+    <!-- TODO are these really needed!? -->
+    <string name="btnOk">Ok</string>
+    <string name="btnCancel">Cancel</string>
+
+	<!-- note-view.xml -->
+	<string name="prefSync">Synchronization</string>
+
+	<string name="prefSyncMethod">Sync Method</string>
+	<string name="prefSyncServerUri">Sync Server Address</string>
+	<string name="prefAuthenticate">Authenticate</string>
+
+	<string name="prefSyncConnectionFailed">The connection to the server has failed, please check that the address you entered is correct.</string>
+	<string name="prefServerEmpty">The server address changed but the new value is empty</string>
+
+	<string name="newNoteTitleRequest">Enter title for new note:</string>
+	<string name="newNoteDefaultContent">new note text</string>
+	<string name="prefSavePassword">Save password</string>
+	<string name="shareAddUrl">Enter location to import from:</string>
+	<string name="shareAlreadyKnown">Share already known</string>
+	<string name="shareAdded">Share added successfully</string>
+	<string name="shareRemoveOne">Choose to remove</string>
+	<string name="shareList">All shares</string>
+	<string name="shareRemove">Remove</string>
+</resources>

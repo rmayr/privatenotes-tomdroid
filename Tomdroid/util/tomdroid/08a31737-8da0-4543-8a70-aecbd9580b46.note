@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<note version="0.3" xmlns="http://beatniksoftware.com/tomboy" xmlns:size="http://beatniksoftware.com/tomboy/size" xmlns:link="http://beatniksoftware.com/tomboy/link">
+  <title>Complex Note</title>
+  <text xml:space="preserve"><note-content version="0.1">
+COMPLEXITYYYY ISSSUUUUEEEE 
+Complex Note
+
+This is an example of a quite complex note...
+<size:small>different
+</size:small><size:large>text</size:large><size:small>
+</size:small><size:huge>sizes</size:huge>
+wi<bold>th diff<strikethrough>eren</strikethrough></bold><strikethrough>t <monospace>fo<size:huge>rmat</size:huge></monospace></strikethrough><strikethrough><monospace>tin</monospace></strikethrough><monospace>g also</monospace>
+<list><list-item dir="ltr">and bullets
+</list-item><list-item dir="ltr"><highlight>which can also have different</highlight>
+</list-item><list-item dir="ltr"><bold><highlight>for<italic>matti</italic></highlight></bold><bold><highlight>ng</highlight></bold></list-item></list>
+
+Hopy you <link:broken>like it or leave it!</link:broken>
+
+:D
+
+complexity =  0 ( soooomuch )
+
+
+ ---=== ROCKING ON ===---
+
+           \m/   d-_-b   \m/
+
+ ---=== ROCKING ON ===---
+
+</note-content>
+  </text>
+  <last-change-date>2011-05-10T09:48:40.000Z</last-change-date>
+</note>
