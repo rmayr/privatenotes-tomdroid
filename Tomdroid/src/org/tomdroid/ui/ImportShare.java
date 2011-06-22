@@ -31,13 +31,19 @@ import org.tomdroid.sync.WebDAV.SharedWebDAVSyncService;
 import org.tomdroid.util.Preferences;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.util.Log;
 import android.widget.Toast;
+import at.fhooe.mcm.webdav.WebDavFactory;
 
 public class ImportShare extends DialogWithInputBox
 {
 
 	// Logging info
 	private static final String TAG = "ImportShare";
+	private final String https = "https://";
 	
 	private Activity last;
 	private static ImportShare instance = new ImportShare();
@@ -57,24 +63,84 @@ public class ImportShare extends DialogWithInputBox
 	@Override
 	protected void onPositiveReaction(String text) {
 		 // add path to shares:
-		if (!addShare(text)) {
-			Toast.makeText(last.getApplicationContext(), last.getString(R.string.shareAlreadyKnown), Toast.LENGTH_LONG).show();
+		checkAndAddShare(text);
+	}
+	
+	/**
+	 * checks if we support that kind of share, if so adds it
+	 * @param share the share link (url)
+	 */
+	public void checkAndAddShare(String share) {
+		if (share.startsWith(SharedWebDAVSyncService.NOTESHARE_URL_PREFIX)) {
+			if (Tomdroid.LOGGING_ENABLED)
+				Log.i(TAG, "removing noteshare-prefix");
+			share = share.substring(SharedWebDAVSyncService.NOTESHARE_URL_PREFIX.length());
+		}
+		
+		if (share.trim().startsWith(https)) {
+			if (WebDavFactory.getClientInfo().supportsHttps == false) {
+				// ask the user if it's ok to switch to http
+				dropHttpsOk(share);
+				// return now, because that method already takes care of adding
+				return;
+			}
+		}
+		
+		if (!share.startsWith("http://")) {
+			onShareAdded(false, "unknown share-link format!");
+			return;
+		}
+		
+		storeShare(share);
+	}
+	
+	/**
+	 * stores the share into the internal storage if it doesn't already exist
+	 * @param share
+	 */
+	private void storeShare(String share) {
+		List<String> paths = getAllShares();
+		if (paths.contains(share))
+			onShareAdded(false, null);
+		paths.add(share);
+		Preferences.putString(Preferences.Key.SHARES, flattenShares(paths));
+		onShareAdded(true, null);
+	}
+	
+	/**
+	 * reaction after the share has been processed
+	 * @param success if true it is assumed that it was added, if false it was not added
+	 * @param errorMsg if not null, that error message will be displayed instead (only for success = false)
+	 */
+	private void onShareAdded(boolean success, String errorMsg) {
+		if (!success) {
+			Toast.makeText(last.getApplicationContext(), (errorMsg != null) ? errorMsg : last.getString(R.string.shareAlreadyKnown), Toast.LENGTH_LONG).show();
 		} else {
 			Toast.makeText(last.getApplicationContext(), last.getString(R.string.shareAdded), Toast.LENGTH_LONG).show();
 		}
 	}
 	
-	public static boolean addShare(String share) {
-		if (share.startsWith(SharedWebDAVSyncService.NOTESHARE_URL_PREFIX)) {
-			share = share.substring(SharedWebDAVSyncService.NOTESHARE_URL_PREFIX.length());
-		}
-		
-		List<String> paths = getAllShares();
-		if (paths.contains(share))
-			return false;
-		paths.add(share);
-		Preferences.putString(Preferences.Key.SHARES, flattenShares(paths));
-		return true;
+	/**
+	 * asks the user if it's ok to switch from https to http
+	 * @return
+	 */
+	private void dropHttpsOk(final String share) {
+		new AlertDialog.Builder(last).setMessage("Cannot use https because of WebDav Library. Switch to http?").setTitle("Unsupported Protocol").
+		setNeutralButton("Yes", new OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int which)
+			{
+				dialog.dismiss();
+				String httpShare = "http://" + share.trim().substring(https.length());
+				storeShare(httpShare);
+			}
+		}).setNegativeButton("No", new OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				onShareAdded(false, "cannot add https share");
+			}
+		}).setIcon(R.drawable.icon).show();
 	}
 	
 	public static boolean removeShare(String share) {

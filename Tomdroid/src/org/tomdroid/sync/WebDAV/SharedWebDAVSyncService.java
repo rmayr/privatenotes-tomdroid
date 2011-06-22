@@ -23,7 +23,7 @@ import android.app.Activity;
 import android.os.Handler;
 import android.util.Log;
 import at.fhooe.mcm.webdav.IWebDav;
-import at.fhooe.mcm.webdav.WebDavInterface;
+import at.fhooe.mcm.webdav.WebDavFactory;
 
 public class SharedWebDAVSyncService extends SdCardSyncServiceShared
 {
@@ -51,7 +51,7 @@ public class SharedWebDAVSyncService extends SdCardSyncServiceShared
 		Map<String, IWebDav> results = new HashMap<String, IWebDav>();
 		for (String share : shares) {
 			try {
-				results.put(share, new WebDavInterface(share));
+				results.put(share, WebDavFactory.getClient(share));
 			} catch (Exception e) {
 				Log.w(TAG, "could not get client for " + share, e);
 				sendMessage(NO_INTERNET);
@@ -144,7 +144,7 @@ public class SharedWebDAVSyncService extends SdCardSyncServiceShared
 		
 		try {
 			String serverUri = Preferences.getString(Preferences.Key.SYNC_SERVER_URI);
-			wdc = new WebDavInterface(serverUri);	
+			wdc = WebDavFactory.getClient(serverUri);	
 		} catch (Exception e) {
 			Log.e(TAG, "error @ sync", e);
 			sendMessage(NO_INTERNET);

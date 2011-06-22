@@ -27,8 +27,6 @@ import org.tomdroid.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
 import android.widget.EditText;
 
 /**
@@ -58,8 +56,6 @@ public class DialogWithInputBox {
 		alert.setMessage(getLabelText());
 		input = new EditText(from);
 		input.setText(getInputText());
-//		LinearLayout container = new LinearLayout(this.getApplicationContext());
-//		container.setOrientation(LinearLayout.VERTICAL);
 		
 		alert.setView(input);
 		alert.setPositiveButton(from.getString(R.string.btnOk), new DialogInterface.OnClickListener() {

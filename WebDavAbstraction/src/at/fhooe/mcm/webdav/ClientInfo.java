@@ -21,38 +21,20 @@
  */
 package at.fhooe.mcm.webdav;
 
-import java.io.File;
-import java.util.Vector;
-
 /**
- * Simple interface for accessing a webdav server via some client
- * 
- * this interface is used to abstract different webdav libraries
- * 
- * @author Paul Klingelhuber
+ * ClientInfo objects give information about WebDav implementations
+ *
  */
-public interface IWebDav {
-
+public class ClientInfo {
+	
 	/**
-	 * gets a list of all files/folders in the current directory
-	 * @return
+	 * true if the implementation supports https
 	 */
-	public abstract Vector<String> getAllChildren();
-
+	public boolean supportsHttps;
+	
 	/**
-	 * downloads a file
-	 * @param _file
-	 * @param _toLocation
-	 * @return
+	 * for any other information that aren't covered currently
 	 */
-	public abstract boolean download(String _file, File _toLocation);
-
-	/**
-	 * uploads a file
-	 * @param _fromLocation
-	 * @param _toFile
-	 * @return
-	 */
-	public abstract boolean upload(File _fromLocation, String _toFile);
+	public String otherInfo;
 
 }

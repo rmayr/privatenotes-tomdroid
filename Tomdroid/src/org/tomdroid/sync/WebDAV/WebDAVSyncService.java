@@ -15,7 +15,7 @@ import android.app.Activity;
 import android.os.Handler;
 import android.util.Log;
 import at.fhooe.mcm.webdav.IWebDav;
-import at.fhooe.mcm.webdav.WebDavInterface;
+import at.fhooe.mcm.webdav.WebDavFactory;
 
 public class WebDAVSyncService extends SdCardSyncService
 {
@@ -63,9 +63,7 @@ public class WebDAVSyncService extends SdCardSyncService
 		setSyncProgress(0);
 		try {
 			String serverUri = Preferences.getString(Preferences.Key.SYNC_SERVER_URI);
-			//IWebDav wdc = new WebDavInterface("http://wampp:xampp@192.168.1.129/webdav/notes4");
-			//final IWebDav wdc = new WebDavInterface("http://wampp:xampp@192.168.56.1/webdav/notes4");
-			final IWebDav wdc = new WebDavInterface(serverUri);
+			final IWebDav wdc = WebDavFactory.getClient(serverUri);
 			
 			execInThread(new Runnable() {
 				public void run() {

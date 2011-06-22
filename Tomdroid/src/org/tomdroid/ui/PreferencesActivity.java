@@ -327,7 +327,7 @@ public class PreferencesActivity extends PreferenceActivity
 		// reset if no-auth required
 		// I believe it's done this way because if needsAuth the database is reset when they successfully auth for the first time
 		// TODO we should graphically warn the user that his database is about to be dropped
-		if (!syncMethod.needsAuth()){
+		if (!syncMethod.needsAuth()) {
 		    resetLocalDatabase();
 		}
 	}

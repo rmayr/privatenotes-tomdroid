@@ -29,7 +29,6 @@ import java.util.UUID;
 
 import org.tomdroid.Note;
 import org.tomdroid.NoteManager;
-import org.tomdroid.sync.sd.SdCardSyncService;
 import org.tomdroid.ui.Tomdroid;
 import org.tomdroid.util.NoteContentMerger;
 import org.tomdroid.util.Preferences;

@@ -1,3 +1,24 @@
+/*
+ * WebDavAbstraction
+ * A WebDav abstraction for different libraries
+ * 
+ * Copyright 2011 Paul Klingelhuber <paul.klingelhuber@students.fh-hagenberg.at>
+ * 
+ * This file is part of WebDavAbstraction.
+ * 
+ * Tomdroid is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * Tomdroid is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with WebDavAbstraction.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package at.fhooe.mcm.webdav;
 
 import it.could.util.http.WebDavClient;
@@ -14,13 +35,25 @@ import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.Vector;
 
+/**
+ * A Webdav client based on the it.could.util.http.WebDavClient library.
+ * It is a VERY basic library but the only one we could find that runs on Android properly
+ * @author Paul Klingelhuber
+ *
+ */
 public class WebDavInterface implements IWebDav {
 	private WebDavClient wdc;
 	
-	public WebDavInterface(String url) throws Exception {
+	/**
+	 * {@inheritDoc}
+	 */
+	WebDavInterface(String url) throws Exception {
 		wdc = new WebDavClient(Location.parse(url));
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public Vector<String> getAllChildren() {
 		Vector<String> results = new Vector<String>();
 		//Iterator it = null;
@@ -48,6 +81,9 @@ public class WebDavInterface implements IWebDav {
 		return results;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean download(String _file, File _toLocation) {
 		InputStream in = null;
 		OutputStream out = null;
@@ -107,6 +143,21 @@ public class WebDavInterface implements IWebDav {
 		}
 	}
 	
+	/**
+	 * creates the clientInfo object for this implementation
+	 * @return ClientInfo object
+	 */
+	public static ClientInfo getClientInfo() {
+		ClientInfo ci = new ClientInfo();
+		ci.supportsHttps = false;
+		ci.otherInfo = "";
+		return ci;
+	}
+	
+	/**
+	 * tries to close a closeable
+	 * @param closeme
+	 */
 	private void tryClose(Closeable closeme) {
 		if (closeme != null) {
 			try {
