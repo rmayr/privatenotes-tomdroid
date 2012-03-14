@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Checkable items appear only in submenus or context menus. -->
+
+    <!-- Carefully look at the attribute name checkableBehavior on groups, but
+         the attribute name checkable on items. The checkableBehavior encompasses
+         the number of items that will be checkable within that group. --><!--
+
+  
+
+    <item android:title="Edit" android:icon="@android:drawable/ic_menu_edit">
+        -->
+           <item android:title="StyleEdit" android:icon="@drawable/ic_menu_edit"
+           	android:id="@+id/styleEdit">
+        <menu>
+            <group android:id="@+id/exclusive_checkable_group"
+                    android:checkableBehavior="none">
+                <!-- Notice how these items inherit from the group. -->
+                <item android:id="@+id/menuBold"
+                        android:title="Bold" />
+                <item android:id="@+id/menuItalic"
+                        android:title="Italic"/>
+                <item android:id="@+id/menuSmaller"
+                        android:title="Smaller text"/>
+                <item android:id="@+id/menuBigger"
+                        android:title="Bigger text"/> 
+                <item android:id="@+id/menuHighligth"
+                        android:title="Highligth"/> 
+                <item android:id="@+id/menuStrikeOut"
+                        android:title="Strike out"/> 
+                <item android:id="@+id/menuFixedWidth"
+                        android:title="Fixed Width"/>
+                <item android:id="@+id/menuRemoveStyle"
+                        android:title="Remove styles"/>
+                <!--
+                 <item android:id="@+id/menuURL"
+                 		android:title="Mar URL"/>
+                --><!--<item android:id="@+id/menuBullets"
+                        android:title="Bullets"/>  
+            --></group>
+        </menu> 
+    </item>
+	<item 
+			android:icon="@android:drawable/ic_menu_edit"
+			android:title="@string/menuEdit"
+			android:id="@+id/menuEdit"
+			/>
+	
+	<item 
+			android:icon="@android:drawable/ic_menu_view"
+			android:title="@string/menuView"
+			android:id="@+id/menuView"
+			/>
+
+	<item 
+			android:icon="@android:drawable/ic_menu_preferences"
+			android:title="@string/menuPrefs"
+			android:id="@+id/menuPrefs"
+			/>
+
+</menu>
