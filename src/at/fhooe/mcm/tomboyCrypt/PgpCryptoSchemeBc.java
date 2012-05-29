@@ -2,6 +2,7 @@ package at.fhooe.mcm.tomboyCrypt;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -10,7 +11,7 @@ import java.util.List;
 
 import org.bouncycastle.openpgp.PGPEncryptedDataGenerator;
 import org.bouncycastle.openpgp.PGPLiteralData;
-import org.tomdroid.util.SecurityUtil;
+import org.privatenotes.util.SecurityUtil;
 
 import android.os.Environment;
 
@@ -90,12 +91,16 @@ public class PgpCryptoSchemeBc implements AsymmetricCryptoScheme {
 			// ignored
 		}
 	}
+	
+	private FileInputStream getKeyFile() throws FileNotFoundException {
+		File extStore = Environment.getExternalStorageDirectory();
+		return new FileInputStream(new File(extStore, "/pgp/secret.key"));
+	}
 
 	public byte[] decryptAsymFile(File file, byte[] key) {
 		try {
 			FileInputStream fin = new FileInputStream(file);
-			File extStore = Environment.getExternalStorageDirectory();
-			FileInputStream keyin = new FileInputStream(new File(extStore, "/pgp/secret.key"));
+			FileInputStream keyin = getKeyFile();
 			byte[] clear = PgpEncryption.decrypt(fin, keyin,
 					new String(SecurityUtil.getInstance().getGpgPassword()).toCharArray());
 			System.out.println("file successfully decryptd");

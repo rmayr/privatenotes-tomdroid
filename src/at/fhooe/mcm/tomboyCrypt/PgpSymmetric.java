@@ -1,5 +1,5 @@
 /**
- * adapted from Bouncycastles ByteArrayHandler (some small changes)s
+ * adapted from Bouncycastles ByteArrayHandler (some small changes)
  */
 package at.fhooe.mcm.tomboyCrypt;
 

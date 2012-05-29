@@ -52,9 +52,11 @@ import android.util.Log;
 import at.fhooe.mcm.tomboyCrypt.Util;
 
 /**
- * A Webdav client based on the Sardine library.
- * It is a VERY basic library
- * @author Paul Klingelhuber
+ * A simple Workaround for the lack of existing WebDAV libraries on Android.
+ * Because we could not get any of them to work, we now have a small script on the server
+ * via which we access the data on the server (very simple HTTP interface).
+ * 
+ * This means that it is only compatible with our server, so no other servers can be used.
  *
  */
 public class WebDavInterface implements IWebDav {
@@ -67,7 +69,7 @@ public class WebDavInterface implements IWebDav {
 		URL x = new URL("http://USER:PASSWORD@privatenotes.dyndns-server.com/webdav2/USER");
 		System.out.println(x.getAuthority());
 		/*
-		WebDavInterface wdi = new WebDavInterface("http://test333:test@privatenotes.dyndns-server.com/webdav2/test333");
+		WebDavInterface wdi = new WebDavInterface("http://USER:PW@privatenotes.dyndns-server.com/webdav2/USER");
 		Vector<String> children = wdi.getAllChildren();
 		for (String c : children) {
 			System.out.println(c);
@@ -142,11 +144,9 @@ public class WebDavInterface implements IWebDav {
 			return new RestResponse(returnCode, data); 
 			
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			data = e.getClass().getName() + " " + e.getMessage();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			data = e.getClass().getName() + " " + e.getMessage();
 		}
@@ -233,6 +233,9 @@ public class WebDavInterface implements IWebDav {
         return false;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean upload(File _fromLocation, String _toFile) {
 		
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
@@ -281,6 +284,11 @@ public class WebDavInterface implements IWebDav {
 		}
 	}
 	
+	/**
+	 * encapsulates a response of a http call
+	 * contains the returned data and the HTTP status code
+	 *
+	 */
 	public static class RestResponse {
 		public int code;
 		public String data;

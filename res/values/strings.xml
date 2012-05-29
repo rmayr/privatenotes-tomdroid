@@ -22,13 +22,13 @@
  along with Tomdroid.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
-    <string name="app_name">Tomdroid</string>
-    <string name="app_desc">Tomboy compatible wikiwiki note-taking application.</string>
-    <string name="author">Olivier Bilodeau, Patrick Gabor, Paul Klingelhuber</string>
+    <string name="app_name">PrivateNotes</string>
+    <string name="app_desc">Tomboy compatible wikiwiki note-taking application with encrypted PrivateNotes sync.</string>
+    <string name="author">Paul Klingelhuber, Patrick Gabor, Original Tomdroid code by Olivier Bilodeau</string>
 
 	<!-- main.xml -->
     <string name="strListEmptyNoNotes">
-    	There are no notes in Tomdroid\'s database.
+    	There are no notes in PrivateNotes\'s database.
     </string>
     
     <string name="menuSave">Save</string>
@@ -42,9 +42,11 @@
     <string name="menuView">View</string>
     <string name="menuRevert">Reset DB</string>
     <string name="strWelcome">
-    	Welcome to Tomdroid.
-    	\n\nThis is a note application for Tomboy.
-    	\nYou can create edit and en-/decrypt notes.
+    	Welcome to PrivateNotes.
+    	\n\nThis is a note application for Tomboy and a fork of Tomdroid.
+    	\nYou can sync, create and edit notes.
+    	\nPrivateNotes sync fully encrypts all notes before sending them from your device.
+    	\n\nIf you want to learn more, please visit privatenotes.dyndns-server.com, Thanks.
     </string>
 <!--     %3$s-->
     <string name="strAbout">
