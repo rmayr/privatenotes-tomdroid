@@ -100,7 +100,7 @@ public class SyncManager {
 		syncMethods.clear();
 		
 		syncMethods.add(new SnowySyncMethod(activity, handler));
-		
+		/*
 		try {
 			syncMethods.add(new SdCardSyncService(activity, handler));
 		} catch (FileNotFoundException e) {
@@ -114,6 +114,7 @@ public class SyncManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		
 		try {
 			syncMethods.add(new SharedWebDAVSyncService(activity, handler));

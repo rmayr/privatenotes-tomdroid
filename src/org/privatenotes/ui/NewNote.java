@@ -86,7 +86,6 @@ public class NewNote extends DialogWithInputBox
 	{
 		Note n = new Note();
 		n.setTitle(title);
-		//n.changeXmlContent(content.getText().toString());
 		n.changeXmlContent(last.getString(R.string.newNoteDefaultContent));
 		new LocalStorage(last).insertNote(n);
 		

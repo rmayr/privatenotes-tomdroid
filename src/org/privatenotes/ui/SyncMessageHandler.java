@@ -106,10 +106,8 @@ public class SyncMessageHandler extends Handler {
 				// won't show it again
 
 				// TODO put error string in a translatable resource
-				new AlertDialog.Builder(activity).setMessage(
-						"There was a password-error. Please make sure you set the right password."
-								+ " Go to settings to do so.")
-						.setTitle("Error").setNeutralButton("Ok", new OnClickListener() {
+				new AlertDialog.Builder(activity).setMessage(activity.getString(R.string.syncPwError))
+						.setTitle(activity.getString(R.string.error)).setNeutralButton(activity.getString(R.string.btnOk), new OnClickListener() {
 							public void onClick(DialogInterface dialog, int which) {
 								dialog.dismiss();
 							}

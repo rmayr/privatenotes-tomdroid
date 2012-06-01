@@ -31,16 +31,10 @@
     	There are no notes in PrivateNotes\'s database.
     </string>
     
-    <string name="menuSave">Save</string>
     <string name="menuSync">Sync</string>
 	<string name="menuPrefs">Settings</string>
     <string name="menuAbout">About</string>
-    <string name="menuNewNote">New Note</string>
-    <string name="menuImportShare">Import</string>
-    <string name="menuDelete">Delete</string>
-    <string name="menuEdit">Edit</string>
-    <string name="menuView">View</string>
-    <string name="menuRevert">Reset DB</string>
+    <string name="titleWelcome">Welcome</string>
     <string name="strWelcome">
     	Welcome to PrivateNotes.
     	\n\nThis is a note application for Tomboy and a fork of Tomdroid.
@@ -52,7 +46,7 @@
     <string name="strAbout">
     	%1$s
     	\n\nAuthor: %2$s
-    	\nVersion: 0.7
+    	\nVersion: %3$s
     	\nLicensed under the GPLv3
     </string>
 
@@ -69,6 +63,7 @@
 
 	<string name="prefSyncConnectionFailed">The connection to the server has failed, please check that the address you entered is correct.</string>
 	<string name="prefServerEmpty">The server address changed but the new value is empty</string>
+	<string name="error">Error</string>
 
 	<string name="newNoteTitleRequest">Enter title for new note:</string>
 	<string name="newNoteDefaultContent">new note text</string>
@@ -79,4 +74,16 @@
 	<string name="shareRemoveOne">Choose to remove</string>
 	<string name="shareList">All shares</string>
 	<string name="shareRemove">Remove</string>
+	<string name="enterGpgPw">Please enter your Gpg Key passphrase:</string>
+	<string name="enterCryptoPw">Please enter a passwort for en- and decryption:</string>
+    <string name="menuNewNote">New Note</string>
+    <string name="menuImportShare">Import</string>
+    <string name="menuEdit">Edit</string>
+    <string name="menuView">View</string>
+    <string name="menuSave">Save</string>
+    <string name="menuDelete">Delete</string>
+    <string name="menuRevert">Reset DB</string>
+    <string name="importConfigTitle">Configuration</string>
+    <string name="importConfig">Import configuration from QR code?</string>
+    <string name="syncPwError">There was a password-error. Please make sure you set the right password. Go to settings to do so.</string>
 </resources>

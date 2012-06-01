@@ -114,7 +114,6 @@ public class PreferencesActivity extends PreferenceActivity
 
 			public boolean onPreferenceChange(Preference preference, Object serverUri)
 			{
-
 				if (serverUri == null)
 				{
 					Toast.makeText(PreferencesActivity.this, getString(R.string.prefServerEmpty), Toast.LENGTH_SHORT).show();
@@ -141,7 +140,6 @@ public class PreferencesActivity extends PreferenceActivity
 				SecurityUtil sec = SecurityUtil.getInstance();
 				Context context = getApplicationContext();
 				byte[] password = sec.getPassword(context);
-				//Log.d(TAG, "password is: " + password);
 				// by saving again with the new settings it will be written to
 				// temporary memory and removed from local
 				Preferences.putBoolean(Preferences.Key.SAVE_PASSWORD, saveLocally);
@@ -261,11 +259,17 @@ public class PreferencesActivity extends PreferenceActivity
 		syncServerUriPreference.setDefaultValue(defaultServer);
 		if(syncServerUriPreference.getText() == null)
 			syncServerUriPreference.setText(defaultServer);
+
+		boolean storePws = (Boolean)Preferences.Key.SAVE_PASSWORD.getDefault();
+		persistPasswordPreference.setDefaultValue(storePws);
 		
 		String defaultService = (String)Preferences.Key.SYNC_METHOD.getDefault();
 		syncMethodPreference.setDefaultValue(defaultService);
-		if(syncMethodPreference.getValue() == null)
+		if(syncMethodPreference.getValue() == null) {
 			syncMethodPreference.setValue(defaultService);
+			// also for store pws, because there we can't check for null
+			persistPasswordPreference.setChecked(storePws);
+		}		
 	}
 
 	private void updatePreferencesTo(String syncMethodName) {

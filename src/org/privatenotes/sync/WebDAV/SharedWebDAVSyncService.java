@@ -69,7 +69,7 @@ public class SharedWebDAVSyncService extends SdCardSyncServiceShared
 	 */
 	@Override
 	public String getDescription() {
-		return "WebDav sync +share";
+		return "PrivateNotes";
 	}
 
 	/**
@@ -168,6 +168,13 @@ public class SharedWebDAVSyncService extends SdCardSyncServiceShared
 	@Override
 	protected void sync() {
 		if (Tomdroid.LOGGING_ENABLED) Log.d(TAG, "beginning webdav sync");
+		
+		// check if we have the necessary passwords
+		if (Tomdroid.getInstance().showPasswordEntryIfNecessary()) {
+			//setSyncProgress(100);
+			//sendMessage(ENCRYPTION_ERROR);
+			return;
+		}
 		
 		final File path = new File(Tomdroid.NOTES_PATH);
 		

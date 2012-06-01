@@ -37,7 +37,7 @@
     <string name="menuSync">Synchronisieren</string>
 	<string name="menuPrefs">Einstellungen</string>
 	<string name="menuAbout">Information</string>
-    <string name="titleWelcome">Warnung</string>
+    <string name="titleWelcome">Willkommen</string>
     <string name="titleAbout">Über PrivateNotes</string>
     <string name="strWelcome">
     	Willkommen bei PrivateNotes.
@@ -129,4 +129,26 @@
 	<!-- 80 chars max -->
 	<string name="market_promotext">Notiz-Programm mit online Synchronisation zu Tomboy.</string>
 	
+	
+	<string name="newNoteTitleRequest">Titel für neue Notiz:</string>
+	<string name="newNoteDefaultContent">Text der neuen Notiz</string>
+	<string name="prefSavePassword">Passwörter merken</string>
+	<string name="shareAddUrl">Link zum importieren eingeben:</string>
+	<string name="shareAlreadyKnown">Freigabe bereits bekannt</string>
+	<string name="shareAdded">Freigabe hinzugefügt</string>
+	<string name="shareRemoveOne">Auswählen um zu löschen</string>
+	<string name="shareList">Alle Freigaben</string>
+	<string name="shareRemove">Löschen</string>
+	<string name="enterGpgPw">Passwort des GPG Schlüssels eingeben:</string>
+	<string name="enterCryptoPw">Passwort zur Notizverschlüsselung:</string>
+    <string name="menuNewNote">Neue Notiz</string>
+    <string name="menuImportShare">Importieren</string>
+    <string name="menuEdit">Bearbeiten</string>
+    <string name="menuView">Anzeigen</string>
+    <string name="menuSave">Speichern</string>
+    <string name="menuDelete">Löschen</string>
+    <string name="menuRevert">DB Zurücksetzen</string>
+    <string name="importConfigTitle">Einstellungen</string>
+    <string name="importConfig">Einstellungen aus QR Code annehmen?</string>
+    <string name="syncPwError">Bitte stelle sicher, dass das richtge Passwort eingestellt ist.</string>
 </resources>

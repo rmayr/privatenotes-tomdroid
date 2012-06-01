@@ -32,6 +32,7 @@ import org.privatenotes.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.util.Log;
@@ -49,6 +50,7 @@ public class ImportShare extends DialogWithInputBox
 	private static final String TAG = "ImportShare";
 	private final String https = "https://";
 	public static final String SHARELINKPREFIX = "note://tomboyshare/";
+	public static final String CONFIGPREFIX = "note://synccfg/";
 	
 	private Activity last;
 	private static ImportShare instance = new ImportShare();
@@ -60,9 +62,9 @@ public class ImportShare extends DialogWithInputBox
 	 * shows an input-dialog where you can enter the new notes title
 	 * @param last
 	 */
-	public static void createNew(Activity last) {
+	public static Dialog createNew(Activity last) {
 		instance.last = last;
-		instance.showDialog(last, last.getString(R.string.shareAddUrl), "https://user:pw@host/path");
+		return instance.createDialog(last, last.getString(R.string.shareAddUrl), "https://user:pw@host/path");
 	}
 	
 	/**

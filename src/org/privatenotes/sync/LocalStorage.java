@@ -30,7 +30,6 @@ import java.util.UUID;
 import org.privatenotes.Note;
 import org.privatenotes.NoteManager;
 import org.privatenotes.ui.Tomdroid;
-import org.privatenotes.util.NoteContentMerger;
 import org.privatenotes.util.Preferences;
 
 import android.app.Activity;

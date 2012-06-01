@@ -26,6 +26,7 @@ import org.privatenotes.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.widget.EditText;
 
@@ -46,7 +47,7 @@ public class DialogWithInputBox {
 	
 	
 	/** shows the input dialog */
-	public void showDialog(Activity from, String text, String defaultInput) {
+	public Dialog createDialog(Activity from, String text, String defaultInput) {
 		if (text != null)
 			labelText = text;
 		if (defaultInput != null)
@@ -71,7 +72,12 @@ public class DialogWithInputBox {
 						onNegativeReaction();
 					}
 				});
-		alert.show();
+		
+		return alert.create();
+	}
+	
+	public void showDialog(Activity from, String text, String defaultInput) {
+		createDialog(from, text, defaultInput).show();
 	}
 	
 	/**

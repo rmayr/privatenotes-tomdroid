@@ -29,14 +29,13 @@ import java.util.regex.Pattern;
 
 import org.privatenotes.Note;
 import org.privatenotes.NoteManager;
+import org.privatenotes.R;
 import org.privatenotes.sync.LocalStorage;
 import org.privatenotes.sync.SyncManager;
 import org.privatenotes.util.LinkifyPhone;
 import org.privatenotes.util.NoteContentBuilder;
-import org.privatenotes.util.XmlUtils;
 import org.privatenotes.xml.NoteContentHandler;
 import org.privatenotes.xml.SpannableToXml;
-import org.privatenotes.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -53,7 +52,6 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.TextWatcher;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.RelativeSizeSpan;

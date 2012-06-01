@@ -92,6 +92,11 @@ public class PgpCryptoSchemeBc implements AsymmetricCryptoScheme {
 		}
 	}
 	
+	public boolean isKeyFileExisting() {
+		File extStore = Environment.getExternalStorageDirectory();
+		return new File(extStore, "/pgp/secret.key").exists();
+	}
+	
 	private FileInputStream getKeyFile() throws FileNotFoundException {
 		File extStore = Environment.getExternalStorageDirectory();
 		return new FileInputStream(new File(extStore, "/pgp/secret.key"));

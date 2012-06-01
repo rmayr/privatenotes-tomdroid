@@ -26,6 +26,7 @@ package org.privatenotes.ui;
 
 import org.privatenotes.Note;
 import org.privatenotes.NoteManager;
+import org.privatenotes.R;
 import org.privatenotes.sync.LocalStorage;
 import org.privatenotes.sync.ServiceAuth;
 import org.privatenotes.sync.SyncManager;
@@ -33,9 +34,9 @@ import org.privatenotes.sync.SyncMethod;
 import org.privatenotes.util.FirstNote;
 import org.privatenotes.util.Preferences;
 import org.privatenotes.util.SecurityUtil;
-import org.privatenotes.R;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -68,12 +69,22 @@ public class Tomdroid extends ListActivity
 	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.tomdroid.note";
 	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.tomdroid.note";
 	public static final String PROJECT_HOMEPAGE = "http://privatenotes.dyndns-server.com/";
+	
+	public static final int DIALOG_WELCOME = 1;
+	public static final int DIALOG_INPUT_PW = 2;
+	public static final int DIALOG_INPUT_GPG_PW = 3;
+	public static final int DIALOG_IMPORT_SHARE = 4;
+	public static final int DIALOG_ACCEPT_CONFIG = 5;
+	// show all necessary password entry dialogs
+	public static final int DIALOG_INPUT_PWS = 6;
+	
 
 	// config parameters
-	// TODO hardcoded for now
 	public static final String NOTES_PATH = Environment.getExternalStorageDirectory() + "/tomdroid/";
 	// Logging should be disabled for release builds
 	public static final boolean	LOGGING_ENABLED		= true;
+	// Set to false for release builds
+	public static final boolean DEBUG = false;
 	// Set this to false for release builds, the reason should be obvious
 	public static final boolean CLEAR_PREFERENCES = false;
 
@@ -104,41 +115,26 @@ public class Tomdroid extends ListActivity
 		{
 			Log.i(TAG, "PrivateNotes is first run.");
 
-			// add a first explanatory note
-			NoteManager.putNote(this, FirstNote.createFirstNote());
+			Note first = FirstNote.createFirstNote();
+			if (NoteManager.getNoteId(this, first.getTitle()) == 0) {
+				// add a first explanatory note (if it doesn't exist yet)
+				// that it exists can happen when user starts and exits via back btn
+				NoteManager.putNote(this, first);
+			}
 
 			// Warn that this is a "will eat your babies" release
-			new AlertDialog.Builder(this).setMessage(getString(R.string.strWelcome)).setTitle("Welcome").setNeutralButton("Ok", new OnClickListener()
-			{
-				public void onClick(DialogInterface dialog, int which)
-				{
-					Preferences.putBoolean(Preferences.Key.FIRST_RUN, false);
-					dialog.dismiss();
-
-				}
-			}).setIcon(R.drawable.icon).show();
+			showDialog(DIALOG_WELCOME);
+			startActivity(new Intent(Tomdroid.this, Tutorial.class));
 		}
 		// else the notes are also listed if the app is started more then one time
-		else
-		{
-			adapter = NoteManager.getListAdapter(Tomdroid.this);
-			setListAdapter(adapter);
 
-			// set the view shown when the list is empty
-			// TODO default empty-list text is butt-ugly!
-			listEmptyView = (TextView) findViewById(R.id.list_empty);
-			getListView().setEmptyView(listEmptyView);
-		}
-		
-		Boolean savePw = Preferences.getBoolean(Preferences.Key.SAVE_PASSWORD);
-		if (Preferences.getBoolean(Preferences.Key.FIRST_RUN)
-				|| !savePw
-				|| (savePw && SecurityUtil.getInstance().getPassword().equals(""))) {
-			showPasswordEntryDialog(false);
-		}
-		if (SecurityUtil.getInstance().needsGpgPassword()) {
-			showPasswordEntryDialog(true);
-		}
+		adapter = NoteManager.getListAdapter(Tomdroid.this);
+		setListAdapter(adapter);
+
+		// set the view shown when the list is empty
+		// TODO default empty-list text is butt-ugly!
+		listEmptyView = (TextView) findViewById(R.id.list_empty);
+		getListView().setEmptyView(listEmptyView);
 		
 		// handle share links that have been clicked/activated from somewhere
 		Intent i = getIntent();		
@@ -147,6 +143,9 @@ public class Tomdroid extends ListActivity
 			if (param.startsWith(ImportShare.SHARELINKPREFIX)) {
 				param = param.substring(ImportShare.SHARELINKPREFIX.length());
 				ImportShare.createNew(this, param);
+			} else if (param.startsWith(ImportShare.CONFIGPREFIX)) {
+				param = param.substring(ImportShare.CONFIGPREFIX.length());
+				showDialog(DIALOG_ACCEPT_CONFIG);
 			}
 		}
 	}
@@ -160,12 +159,60 @@ public class Tomdroid extends ListActivity
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-
 		// Create the menu based on what is defined in res/menu/main.xml
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
+		if (!Tomdroid.DEBUG) {
+			// remove the reset item in production
+			menu.removeItem(R.id.menuRevert);
+		}
 		return true;
-
+	}
+	
+	@Override
+	public Dialog onCreateDialog(int id) {
+		Dialog d = null;
+		switch (id) {
+		case DIALOG_WELCOME:
+			d = new AlertDialog.Builder(this).setMessage(getString(R.string.strWelcome)).setTitle(getString(R.string.titleWelcome)).setNeutralButton("Ok", new OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int which)
+				{
+					Preferences.putBoolean(Preferences.Key.FIRST_RUN, false);
+					dialog.dismiss();
+				}
+			}).setIcon(R.drawable.icon).create();
+		break;
+		case DIALOG_INPUT_PW:
+			d = createPasswordEntryDialog(false, false);
+		break;
+		case DIALOG_INPUT_GPG_PW:
+			d = createPasswordEntryDialog(true, false);
+		break;
+		case DIALOG_INPUT_PWS:
+			// show both dialogs:
+			
+			d = createPasswordEntryDialog(true, true);
+		break;
+		case DIALOG_IMPORT_SHARE:
+			d = ImportShare.createNew(this);
+		break;
+		case DIALOG_ACCEPT_CONFIG:
+			d = YesNoDialog.createDialog(this, getString(R.string.importConfigTitle), getString(R.string.importConfig),
+					null, null, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							String param = Tomdroid.this.getIntent().getData().toString();
+							if (param.startsWith(ImportShare.CONFIGPREFIX)) {
+								param = param.substring(ImportShare.CONFIGPREFIX.length());
+								Preferences.putString(Preferences.Key.SYNC_SERVER_URI, param);
+								Preferences.putString(Preferences.Key.SYNC_METHOD, (String)Preferences.Key.SYNC_METHOD.getDefault());
+							}
+							dialog.dismiss();
+						}
+					}, null);
+		break;
+		}
+		return d;
 	}
 
 	@Override
@@ -176,16 +223,15 @@ public class Tomdroid extends ListActivity
 		case R.id.menuAbout:
 			showAboutDialog();
 			return true;
-
 		case R.id.menuPrefs:
 			startActivity(new Intent(this, PreferencesActivity.class));
 			return true;
-
 		case R.id.menuNewNote:
 			NewNote.createNew(this);
 			return true;
 		case R.id.menuImportShare:
-			ImportShare.createNew(this);
+			showDialog(DIALOG_IMPORT_SHARE);
+			//ImportShare.createNew(this);
 			return true;
 		case R.id.menuRevert:
 			LocalStorage localStorage = new LocalStorage(this);
@@ -206,7 +252,7 @@ public class Tomdroid extends ListActivity
 
 		SyncMethod currentService = SyncManager.getInstance().getCurrentSyncMethod();
 
-		if (currentService.needsAuth() && intent != null)
+		if (intent != null && currentService.needsAuth())
 		{
 			Uri uri = intent.getData();
 
@@ -254,11 +300,34 @@ public class Tomdroid extends ListActivity
 		finish();
 	}
 	
-	public static void showPasswordEntryDialog(final boolean isGpgPassword) {
+	/**
+	 * shows the password entry dialog (or both) if necessary
+	 */
+	public boolean showPasswordEntryIfNecessary() {
+		//Boolean savePw = Preferences.getBoolean(Preferences.Key.SAVE_PASSWORD);
+		if (SecurityUtil.getInstance().needsPwEntered()) {
+			if (SecurityUtil.getInstance().needsGpgPassword()) {
+				showDialog(DIALOG_INPUT_PWS);
+				return true;
+			} else {
+				showDialog(DIALOG_INPUT_PW);
+				return true;
+			}
+		} else if (SecurityUtil.getInstance().needsGpgPassword()) {
+				showDialog(DIALOG_INPUT_GPG_PW);
+				return true;
+		}
+		return false;
+	}
+	
+	public static Dialog createPasswordEntryDialog(final boolean isGpgPassword, final boolean showBoth) {
 		final AlertDialog.Builder alert = new AlertDialog.Builder(Tomdroid.m_insTomdroid);
 		final EditText input = new EditText(Tomdroid.m_insTomdroid);
 		input.setTransformationMethod(new PasswordTransformationMethod());
-		String title = isGpgPassword?"Please enter your Gpg Key passphrase!":"Please enter a passwort for en- and decryption!";
+		Tomdroid ctxt = getInstance();
+		String enterGPG = ctxt.getString(R.string.enterGpgPw);
+		String enterPw = ctxt.getString(R.string.enterCryptoPw);
+		String title = isGpgPassword?enterGPG:enterPw;
 		alert.setTitle(title);
 		alert.setIcon(R.drawable.ic_menu_login);
 		alert.setView(input);
@@ -272,23 +341,27 @@ public class Tomdroid extends ListActivity
 					} else {						
 						SecurityUtil.getInstance().setPassword(input.getText().toString().getBytes());
 					}
+					if (showBoth) {
+						Tomdroid.getInstance().showDialog(isGpgPassword?DIALOG_INPUT_PW:DIALOG_INPUT_PW);
+					}
 				}
 			});
 
-		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+		alert.setNegativeButton(ctxt.getString(R.string.btnCancel), new DialogInterface.OnClickListener()
 			{
 				public void onClick(DialogInterface dialog, int whichButton)
 				{
-					//TODO dialog reopen on a new start
+					if (showBoth) {
+						Tomdroid.getInstance().showDialog(isGpgPassword?DIALOG_INPUT_PW:DIALOG_INPUT_PW);
+					}
 				}
 			});
 		
-		alert.show();
+		return alert.create();
 	}
 
 	private void showAboutDialog()
 	{
-
 		// grab version info
 		String ver;
 		try
@@ -320,6 +393,12 @@ public class Tomdroid extends ListActivity
 			public void onClick(DialogInterface dialog, int which)
 			{
 				dialog.dismiss();
+			}
+		}).setNeutralButton("Help", new OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int which)
+			{
+				startActivity(new Intent(Tomdroid.this, Tutorial.class));
 			}
 		}).show();
 	}

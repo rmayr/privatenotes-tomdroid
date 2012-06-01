@@ -54,7 +54,6 @@ public class Actionbar extends RelativeLayout {
 	}
 	
 	private void setupSyncButton(){
-		
 		final ImageView syncButton = (ImageView) findViewById(R.id.sync);
 		final ImageView syncIcon = (ImageView) findViewById(R.id.syncIcon);
 		syncIcon.getDrawable().setAlpha(Actionbar.DEFAULT_ICON_ALPHA);
