@@ -20,6 +20,14 @@
  */
 package org.privatenotes.ui;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.spongycastle.util.encoders.Base64;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +42,9 @@ public class Tutorial extends Activity
 
 	// UI to data model glue
 	private WebView webView;
+	
+	// HTML page displaying "loading...\nPleaseWait." centered on page
+	private static final String loadingText = "<html style=\"height:100%;\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></head><body><div style=\"width:100%;text-align:center;position:absolute;top:50%;margin-top:-1em;font-size:x-large;font-family:sans-serif;\">Loading...<br/>Please wait.</div></body></html>";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -57,11 +68,30 @@ public class Tutorial extends Activity
 					}
 					return false;
 				}
+				
+				@Override
+				public void onPageFinished(WebView view, String url) {
+					if (!url.startsWith("http")) {
+						Log.d(TAG, "placeholder loaded, load url now");
+						webView.loadUrl("http://dl.dropbox.com/u/1526874/PrivateNotes/setup/index.html");
+					}
+				}
 		});
 		
 		webView.getSettings().setJavaScriptEnabled(true);
 		
-		webView.loadUrl("http://dl.dropbox.com/u/1526874/PrivateNotes/setup/index.html");
+		// display loading before doing actual loading
+		webView.loadData(toBase64(loadingText), "text/html", "base64");
+	}
+	
+	private String toBase64(String data) {
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		try {
+			Base64.encode(data.getBytes("UTF-8"), buffer);
+			return buffer.toString("UTF-8");
+		} catch (IOException e) {
+			return null;
+		}
 	}
 
 }
