@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='utf-8' ?>
-<note version="0.3" xmlns="http://beatniksoftware.com/tomboy" xmlns:size="http://beatniksoftware.com/tomboy/size" xmlns:link="http://beatniksoftware.com/tomboy/link">
-  <title>newnote1</title>
-  <text xml:space="preserve">
-    <note-content version="1.0">new note text
-    </note-content>
-  </text>
-  <last-change-date>2011-05-10T09:13:58.000Z</last-change-date>
-</note>

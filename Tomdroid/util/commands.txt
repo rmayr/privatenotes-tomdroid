@@ -1,8 +1,0 @@
-# some commands for the adb shell (copy them from here, for reference:
-# always use the cmd for adb shell, because in cygwin it doesn't really work!
-
-adb shell
-
-ls /sdcard/tomdroid
-
-cat /sdcard/tomdroid/manifest.xml 
