@@ -1,13 +1,9 @@
 /*
- * Tomdroid
- * Tomboy on Android
- * http://www.launchpad.net/tomdroid
+ * PrivateNotes
  * 
- * Copyright 2009, 2010 Olivier Bilodeau <olivier@bottomlesspit.org>
- * Copyright 2009, Benoit Garret <benoit.garret_launchpad@gadz.org>
- * Copyright 2010, Rodja Trappe <mail@rodja.net>
+ * Copyright 2011 Paul Klingelhuber <paul.klingelhuber@students.fh-hagenberg.at>
  * 
- * This file is part of Tomdroid.
+ * This file is part of PrivateNotes.
  * 
  * Tomdroid is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

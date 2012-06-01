@@ -92,14 +92,27 @@ public class PgpCryptoSchemeBc implements AsymmetricCryptoScheme {
 		}
 	}
 	
-	public boolean isKeyFileExisting() {
+	private File getFirstKeyFile() {
 		File extStore = Environment.getExternalStorageDirectory();
-		return new File(extStore, "/pgp/secret.key").exists();
+		File[] files = new File(extStore, "pgp/").listFiles();
+		for (File f : files) {
+			if (f.getName().endsWith(".key")) {
+				return f;
+			}
+		}
+		return null;
+	}
+	
+	public boolean isKeyFileExisting() {
+		return getFirstKeyFile() != null;
 	}
 	
 	private FileInputStream getKeyFile() throws FileNotFoundException {
-		File extStore = Environment.getExternalStorageDirectory();
-		return new FileInputStream(new File(extStore, "/pgp/secret.key"));
+		File key = getFirstKeyFile();
+		if (key == null) {
+			throw new FileNotFoundException("You have to have a file called secret.key in the pgp directory on your SD card.");
+		}
+		return new FileInputStream(key);
 	}
 
 	public byte[] decryptAsymFile(File file, byte[] key) {

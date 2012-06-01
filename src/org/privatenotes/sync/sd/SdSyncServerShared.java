@@ -1,11 +1,9 @@
 /*
- * Tomdroid
- * Tomboy on Android
- * http://www.launchpad.net/tomdroid
+ * PrivateNotes
  * 
  * Copyright 2011 Paul Klingelhuber <paul.klingelhuber@students.fh-hagenberg.at>
  * 
- * This file is part of Tomdroid.
+ * This file is part of PrivateNotes.
  * 
  * Tomdroid is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -161,8 +159,7 @@ public class SdSyncServerShared extends SdSyncServer {
 
 		byte[] decrypted = cscheme.decryptFile(manifestFile, SecurityUtil
 				.getInstance().getPassword());
-		// If a wrong password was enterd, a note will be created with the
-		// content ERROR in decryption.
+
 		if (decrypted == null) {
 			throw new EncryptionException("crypto error while reading manifest");
 		}
@@ -175,9 +172,8 @@ public class SdSyncServerShared extends SdSyncServer {
 			File sharedManifest = new File(f, "manifest.xml");
 			if (sharedManifest.exists()) {
 				decrypted = ((AsymmetricCryptoScheme)cscheme).decryptAsymFile(sharedManifest, SecurityUtil
-						.getInstance().getPassword());
-				// If a wrong password was enterd, a note will be created with the
-				// content ERROR in decryption.
+						//.getInstance().getPassword());
+						.getInstance().getGpgPassword());
 				if (decrypted == null) {
 					Log.w(TAG, "crypto error while reading a shared manifest");
 					return false;

@@ -139,7 +139,7 @@ public class Tomdroid extends ListActivity
 		// handle share links that have been clicked/activated from somewhere
 		Intent i = getIntent();		
 		if (i != null && i.getData() != null) {
-			String param = i.getData().toString();
+			String param = i.getData().toString();		
 			if (param.startsWith(ImportShare.SHARELINKPREFIX)) {
 				param = param.substring(ImportShare.SHARELINKPREFIX.length());
 				ImportShare.createNew(this, param);
@@ -207,9 +207,16 @@ public class Tomdroid extends ListActivity
 								Preferences.putString(Preferences.Key.SYNC_SERVER_URI, param);
 								Preferences.putString(Preferences.Key.SYNC_METHOD, (String)Preferences.Key.SYNC_METHOD.getDefault());
 							}
+							// prevent it from re-appearing by removing the intent
+							Tomdroid.this.setIntent(new Intent());
 							dialog.dismiss();
 						}
-					}, null);
+					}, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							// prevent it from re-appearing by removing the intent
+							Tomdroid.this.setIntent(new Intent());
+						}
+					});
 		break;
 		}
 		return d;

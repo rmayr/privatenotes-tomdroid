@@ -34,6 +34,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.util.Log;
 import android.widget.Toast;
@@ -83,6 +84,15 @@ public class ImportShare extends DialogWithInputBox
 	protected void onPositiveReaction(String text) {
 		 // add path to shares:
 		checkAndAddShare(text);
+		
+		// prevent it from re-appearing by removing the intent
+		last.setIntent(new Intent());
+	}
+	
+	@Override
+	protected void onNegativeReaction() {
+		// prevent it from re-appearing by removing the intent
+		last.setIntent(new Intent());
 	}
 	
 	/**

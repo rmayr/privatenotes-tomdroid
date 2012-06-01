@@ -104,9 +104,7 @@ public class SdCardSyncService extends SyncMethod {
 	 */
 	@Override
 	protected void sync() {
-
 		setSyncProgress(0);
-			
 		sync(true);
 	}
 	
