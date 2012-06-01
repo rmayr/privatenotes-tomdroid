@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="libs/signpost-commonshttp4-1.2.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/signpost-core-1.2.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/scprov-jdk15-1.46.99.3-UNOFFICIAL-ROBERTO-RELEASE.jar"/>
+	<classpathentry kind="src" path="tests"/>
+	<classpathentry kind="lib" path="libs/java-diff-utils-1.2.jar"/>
+	<classpathentry kind="lib" path="libs/bcpg-jdk16-145.jar"/>
+	<classpathentry kind="lib" path="libs/bcprov-jdk16-145.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>
