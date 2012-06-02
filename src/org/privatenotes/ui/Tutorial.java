@@ -22,13 +22,12 @@ package org.privatenotes.ui;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.spongycastle.util.encoders.Base64;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebView;
@@ -64,6 +63,12 @@ public class Tutorial extends Activity
 						} catch (Throwable e) {
 							Log.e(TAG, "could not close the activity", e);
 						}
+						return true;
+					} else if (url.toLowerCase().contains("play.google.com")) {
+						//should open google play store link, trigger real intent open:
+						Intent i = new Intent(Intent.ACTION_VIEW);
+						i.setData(Uri.parse(url));
+						startActivity(i);
 						return true;
 					}
 					return false;
