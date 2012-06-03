@@ -43,6 +43,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -81,6 +82,8 @@ public class ViewNote extends Activity {
 	// Model objects
 	private Note note;
 	private SpannableStringBuilder noteContent;
+	
+	
 
 	// Logging info
 	private static final String TAG = "ViewNote";
@@ -91,6 +94,12 @@ public class ViewNote extends Activity {
 	private LocalStorage localStorage;
 	private ViewSwitcher viewSwitcher;
 	private GestureDetector gestureDetector;
+	
+	private String backupStringBeforeRawEdit = null;
+	private boolean isRetry = false;
+	private static SpannableStringBuilder persistedContent = null;
+	
+	private Runnable saveDoneCallback = null;
 
 	// TODO extract methods in here
 	@Override
@@ -106,14 +115,24 @@ public class ViewNote extends Activity {
 		title.setBackgroundColor(0xffdddddd);
 		title.setTextColor(Color.DKGRAY);
 		title.setTextSize(18.0f);
-
-		final Intent intent = getIntent();
-		handleUri(intent.getData());
-
+		
 		localStorage = new LocalStorage(this);
 		ViewGroup container = (ViewGroup) findViewById(R.id.container);
 		viewSwitcher = new ViewSwitcher(container);
 		
+		boolean orientationChange = savedInstanceState != null && savedInstanceState.getBoolean("CONFIGCHANGE");
+		if (orientationChange) {
+			// if only the orientation changed, don't reload the note from the database (may not be done saving!)
+			note = NoteManager.getNote(this, getIntent().getData());
+			noteContent = persistedContent;
+		} else {
+			final Intent intent = getIntent();
+			handleUri(intent.getData());
+			viewNote();
+		}
+
+		// doubleTap as input method switcher disabled for now... often triggered by mistake
+		/*
 		gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
 			@Override
 			public boolean onDoubleTap(MotionEvent e) {
@@ -124,14 +143,13 @@ public class ViewNote extends Activity {
 				return true;
 			}
 		});
-		
-		viewNote();
+		*/
 	}
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent event) {
-		if (gestureDetector.onTouchEvent(event))
-		 return true;
+		if (gestureDetector != null && gestureDetector.onTouchEvent(event))
+			return true;
 		return super.dispatchTouchEvent(event);
 	}
 
@@ -181,6 +199,13 @@ public class ViewNote extends Activity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_notes, menu);
 		return true;
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle save) {
+		  persistedContent = noteContent;
+		  save.putBoolean("CONFIGCHANGE", true);
+		  super.onSaveInstanceState(save);
 	}
 	
 	/**
@@ -252,19 +277,28 @@ public class ViewNote extends Activity {
 		// find right text-panel depending on current view
 		TextView textView = (TextView) findViewById(R.id.editContent);
 		String editedText = "";
-		if (isInViewMode()) {
+		boolean inViewMode = isInViewMode();
+		if (inViewMode) {
 			textView = (TextView)findViewById(R.id.content);
 			editedText = spannableToXml();
 		} else {
 			editedText = textView.getText().toString();
 		}
+		saveEditedContent(editedText, inViewMode);
+	}
+	
+	private void saveEditedContent(String editedText, boolean fromViewMode) {
 		String cleanedNoteText = NoteContentHandler.cleanNoteXmlOfTitle(note.getTitle(), note.getXmlContent());
 		if (!editedText.equals(cleanedNoteText)) {
 			note.changeXmlContent(NoteContentHandler.wrapContentWithTitleAndContentTag(note.getTitle(), editedText));
-			note.isSynced(false);
-			localStorage.insertNote(note);
-			if (Tomdroid.LOGGING_ENABLED)
-				Log.v(TAG, textView.getText().toString() + "\n----\n" + note.getXmlContent());
+			if (fromViewMode) {
+				// this fixes the content if it is broken
+				note.getNoteContent(noteContentRawEditTestHandler);
+			} else {
+				// save immediately
+				note.isSynced(false);
+				localStorage.insertNote(note);
+			}
 		}
 	}
 
@@ -280,6 +314,8 @@ public class ViewNote extends Activity {
 		if (isInEditMode()) {
 			return;
 		}
+		isRetry = false;
+		saveDoneCallback = null;
 		saveEditedContent();
 		viewSwitcher.swap();
 
@@ -299,6 +335,11 @@ public class ViewNote extends Activity {
 		
 		String editableText = NoteContentHandler.cleanNoteXmlOfTitle(note.getTitle(), note.getXmlContent());
 		textView.setText(editableText);
+		
+		// save a backup if user screws up in this mode
+		if (!isRetry) {
+			backupStringBeforeRawEdit = editableText;
+		}
 	}
 
 	private void switchToViewMode() {
@@ -306,11 +347,15 @@ public class ViewNote extends Activity {
 			return;
 		}
 		saveEditedContent();
-		viewSwitcher.swap();
-		InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-				InputMethodManager.HIDE_NOT_ALWAYS);
-		viewNote();
+		saveDoneCallback = new Runnable() {
+			public void run() {
+				viewSwitcher.swap();
+				InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+						InputMethodManager.HIDE_NOT_ALWAYS);
+				viewNote();
+			}
+		};
 	}
 	
 	public String spannableToXml() {
@@ -499,12 +544,45 @@ public class ViewNote extends Activity {
 
 		content.setText(noteContent, TextView.BufferType.SPANNABLE);
 	}
+	
+	private Handler noteContentRawEditTestHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			if (msg.what == NoteContentBuilder.PARSE_OK) {
+				// save
+				note.isSynced(false);
+				localStorage.insertNote(note);
+				
+				if (saveDoneCallback != null) {
+					saveDoneCallback.run();
+				}
+			}
+			else if (msg.what == NoteContentBuilder.PARSE_ERROR)
+			 {
+				 if (!isRetry) {
+					 new AlertDialog.Builder(ViewNote.this).setMessage(
+							 getString(R.string.rawEditFail)).setTitle(
+							 getString(R.string.error)).setNeutralButton(
+							 getString(R.string.btnOk), new OnClickListener()
+								 {
+									 public void onClick(DialogInterface dialog, int which)
+									 {
+										 dialog.dismiss();
+									 }
+								 }).show();
+					 isRetry = true;
+					 saveEditedContent(backupStringBeforeRawEdit, false);
+					 editNote();
+					 return;
+				 }
+			 }
+		}
+	};
 
 	private Handler noteContentHandler = new Handler() {
 
 		@Override
 		public void handleMessage(Message msg) {
-
 
 			 // parsed ok - show
 			 if (msg.what == NoteContentBuilder.PARSE_OK)
@@ -527,7 +605,6 @@ public class ViewNote extends Activity {
 								 dialog.dismiss();
 								 // go to edit mode, maybe the user can still fix it
 								 switchToEditMode();
-								 //finish();
 							 }
 						 }).show();
 			 }

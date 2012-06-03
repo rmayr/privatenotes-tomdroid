@@ -78,7 +78,7 @@
 	<string name="enterCryptoPw">Please enter a passwort for en- and decryption:</string>
     <string name="menuNewNote">New Note</string>
     <string name="menuImportShare">Import</string>
-    <string name="menuEdit">Edit</string>
+    <string name="menuEdit">Raw Edit</string>
     <string name="menuView">View</string>
     <string name="menuSave">Save</string>
     <string name="menuDelete">Delete</string>
@@ -86,4 +86,8 @@
     <string name="importConfigTitle">Configuration</string>
     <string name="importConfig">Import configuration from QR code?</string>
     <string name="syncPwError">There was a password-error. Please make sure you set the right password. Go to settings to do so.</string>
+    <string name="rawEditFail">It seems you introduced some error in the note markup, the version from the start of the raw edit will be restored.</string>
+    <string name="help">Help</string>
+    <string name="projectPage">Project page</string>
+    
 </resources>

@@ -388,20 +388,20 @@ public class Tomdroid extends ListActivity
 				);
 
 		// build and show the dialog
-		new AlertDialog.Builder(this).setMessage(aboutDialogStr).setTitle("About PrivateNotes").setIcon(R.drawable.icon).setNegativeButton("Project page", new OnClickListener()
+		new AlertDialog.Builder(this).setMessage(aboutDialogStr).setTitle("About PrivateNotes").setIcon(R.drawable.icon).setNegativeButton(getString(R.string.projectPage), new OnClickListener()
 		{
 			public void onClick(DialogInterface dialog, int which)
 			{
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Tomdroid.PROJECT_HOMEPAGE)));
 				dialog.dismiss();
 			} 
-		}).setPositiveButton("Ok", new OnClickListener()
+		}).setPositiveButton(getString(R.string.btnOk) , new OnClickListener()
 		{
 			public void onClick(DialogInterface dialog, int which)
 			{
 				dialog.dismiss();
 			}
-		}).setNeutralButton("Help", new OnClickListener()
+		}).setNeutralButton(getString(R.string.help), new OnClickListener()
 		{
 			public void onClick(DialogInterface dialog, int which)
 			{

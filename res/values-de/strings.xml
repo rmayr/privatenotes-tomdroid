@@ -143,7 +143,7 @@
 	<string name="enterCryptoPw">Passwort zur Notizverschlüsselung:</string>
     <string name="menuNewNote">Neue Notiz</string>
     <string name="menuImportShare">Importieren</string>
-    <string name="menuEdit">Bearbeiten</string>
+    <string name="menuEdit">Rohfassung</string>
     <string name="menuView">Anzeigen</string>
     <string name="menuSave">Speichern</string>
     <string name="menuDelete">Löschen</string>
@@ -151,4 +151,7 @@
     <string name="importConfigTitle">Einstellungen</string>
     <string name="importConfig">Einstellungen aus QR Code annehmen?</string>
     <string name="syncPwError">Bitte stelle sicher, dass das richtge Passwort eingestellt ist.</string>
+    <string name="rawEditFail">Anscheinend hast du beim Rohdaten ändern einen Fehler erzeugt, die vorige Version wird wiederhergestellt.</string>
+     <string name="help">Hilfe</string>
+     <string name="projectPage">Webseite</string>
 </resources>
