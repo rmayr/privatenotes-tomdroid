@@ -95,6 +95,7 @@ public class PgpCryptoSchemeBc implements AsymmetricCryptoScheme {
 	private File getFirstKeyFile() {
 		File extStore = Environment.getExternalStorageDirectory();
 		File[] files = new File(extStore, "pgp/").listFiles();
+		files = (files == null) ? new File[0] : files;
 		for (File f : files) {
 			if (f.getName().endsWith(".key")) {
 				return f;

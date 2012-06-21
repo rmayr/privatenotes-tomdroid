@@ -267,7 +267,7 @@ public class Note implements Cloneable {
 	}
 	
 	public void setGuid(String guid) {
-		this.guid = UUID.fromString(guid);
+		this.guid = UUID.fromString(fixUUID(guid));
 	}
   
 	public void setGuid(UUID guid) {
@@ -326,6 +326,31 @@ public class Note implements Cloneable {
 		return new JSONObject("{'guid':'" + getGuid() + "', 'title':'" + getTitle()
 				+ "', 'note-content':'" + getJsonPreparedXmlContent() + "', 'last-change-date':'"
 				+ getLastChangeDate().format3339(false) + "', 'note-content-version':0.1}");
+	}
+	
+	/**
+	 * makes sure we have a valid uuid, sometimes they arrive without the
+	 * dashes (seen in Google play crash reports)
+	 * @param uuid
+	 * @return
+	 */
+	public static String fixUUID(String uuid) {
+		if (uuid.contains("-")) {
+			return uuid;
+		} else {
+			Log.d(TAG, "fixing guid " + uuid);
+			StringBuilder sb = new StringBuilder(38);
+			sb.append(uuid.substring(0, 8));
+			sb.append("-");
+			sb.append(uuid.substring(8, 12));
+			sb.append("-");
+			sb.append(uuid.substring(12, 16));
+			sb.append("-");
+			sb.append(uuid.substring(16, 20));
+			sb.append("-");
+			sb.append(uuid.substring(20));
+			return sb.toString();
+		}
 	}
 
 	private String getJsonPreparedXmlContent() {

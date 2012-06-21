@@ -79,6 +79,7 @@ public class PreferencesActivity extends PreferenceActivity
 
 		// Fill the Preferences fields
 		syncServerUriPreference = (EditTextPreference)findPreference(Preferences.Key.SYNC_SERVER_URI.getName());
+		syncServerUriPreference.getEditText().setSingleLine(); // only one line allowed
 		syncMethodPreference = (ListPreference)findPreference(Preferences.Key.SYNC_METHOD.getName());
 		persistPasswordPreference = (CheckBoxPreference)findPreference(Preferences.Key.SAVE_PASSWORD.getName());
 		syncSharesPreference = (ListPreference)findPreference("sharesList");
@@ -119,9 +120,13 @@ public class PreferencesActivity extends PreferenceActivity
 					Toast.makeText(PreferencesActivity.this, getString(R.string.prefServerEmpty), Toast.LENGTH_SHORT).show();
 					return false;
 				}
+				
+				// sometimes we end up with linebreaks in there, remove them
+				String uri = (String)serverUri;
+				uri = uri.replace("\r", "").replace("\n", "");
 
 				// update the value before doing anything
-				Preferences.putString(Preferences.Key.SYNC_SERVER_URI, (String) serverUri);
+				Preferences.putString(Preferences.Key.SYNC_SERVER_URI, uri);
 				
 				authenticate((String) serverUri);
 				return true;
